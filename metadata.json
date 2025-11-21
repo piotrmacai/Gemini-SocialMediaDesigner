@@ -1,0 +1,7 @@
+{
+  "name": "AInsider Creator Studio",
+  "description": "Enterprise-grade social media content creation suite powered by Gemini Nano Banana and Veo models.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
