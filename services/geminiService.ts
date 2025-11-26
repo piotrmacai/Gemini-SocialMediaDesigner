@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { GenerationModel } from "../types";
 
@@ -65,6 +66,56 @@ export const generateBackgroundStyle = async (
     throw error;
   }
 };
+
+export const generateSocialCaption = async (title: string, description: string) => {
+  const ai = getClient();
+  const prompt = `
+    Act as a professional social media manager.
+    Write a compelling, engaging social media caption (Instagram/LinkedIn style) for a post with:
+    Title: "${title}"
+    Context: "${description}"
+    
+    Requirements:
+    - Catchy first line (hook).
+    - Professional but energetic tone.
+    - Include 3-5 relevant hashtags at the end.
+    - Use emojis sparingly but effectively.
+    - Keep it under 150 words.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: GenerationModel.TEXT_FAST,
+      contents: prompt
+    });
+    return response.text;
+  } catch (error) {
+    console.error("Error generating caption:", error);
+    throw error;
+  }
+};
+
+export const refineDescription = async (currentText: string, title: string) => {
+  const ai = getClient();
+  const prompt = `
+    Rewrite the following short description to be punchy, clear, and engaging for a visual social media graphic.
+    Context Title: "${title}"
+    Current Draft: "${currentText || 'No description provided yet, please write one based on the title.'}"
+    
+    Keep it under 20 words. Return ONLY the rewritten text.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: GenerationModel.TEXT_FAST,
+      contents: prompt
+    });
+    return response.text;
+  } catch (error) {
+    console.error("Error refining description:", error);
+    throw error;
+  }
+}
 
 export const generateVeoVideo = async (prompt: string) => {
     const ai = getClient();
